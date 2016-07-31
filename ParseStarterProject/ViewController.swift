@@ -14,7 +14,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
 //        let testObject = PFObject(className: "TestObject")
 //        testObject["foo"] = "bar"
@@ -22,26 +21,51 @@ class ViewController: UIViewController {
 //            print("Object has been saved.")
 //        }
         
-        var product = PFObject(className: "Products")
+//        var product = PFObject(className: "Products")
+//        
+//        product["name"] = "Ice Cream"
+//        
+//        product["description"] = "Mint chocolate chip"
+//        
+//        product["price"] = 4.99
+//        
+//        product.saveInBackgroundWithBlock { (success, error) in
+//            if success == true {
+//                print("Object with ID \(product.objectId)")
+//                
+//            
+//            } else {
+//            
+//                print("fail")
+//                print(error)
+//            
+//            }
+//        }
         
-        product["name"] = "Pizza"
+        // can use item ID to retreive saved item
+        var query = PFQuery(className: "Products")
         
-        product["description"] = "Delicously cheesy"
+        query.getObjectInBackgroundWithId("pJ77fHq1wt", block: { (object: PFObject?, error: NSError? ) in
         
-        product["price"] = 9.99
-        
-        product.saveInBackgroundWithBlock { (success, error) in
-            if success == true {
-                print("success")
-                
+            if error != nil {
             
-            } else {
-            
-                print("fail")
                 print(error)
             
+            // DOWNLOAD PRODUCT FROM PARSE AND UPDATE ITS INFORMATION
+            // if we can create a variable called product equal to our object
+            } else if let product = object {
+            
+                product["description"] = "Rocky Road"
+                
+                product["price"] = 5.99
+                
+                product.saveInBackground()
+                
+                // print(object!.objectForKey("description"))
+            
             }
-        }
+            
+        })
 
         
     }
