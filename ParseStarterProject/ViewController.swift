@@ -10,10 +10,39 @@
 import UIKit
 import Parse
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]! ) {
+        
+        print("Image Selected")
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
+        importedImage.image = image
+    }
+    
+    @IBAction func importImage(sender: AnyObject) {
+        
+        
+        var image = UIImagePickerController()
+        image.delegate = self
+        image.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        image.allowsEditing = false
+        
+        self.presentViewController(image, animated: true, completion: nil)
+        
+    }
+    
+    @IBOutlet var importedImage: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // retrieve images from camera
+        
+        
+        
+        
         
 //        let testObject = PFObject(className: "TestObject")
 //        testObject["foo"] = "bar"
@@ -42,6 +71,7 @@ class ViewController: UIViewController {
 //            }
 //        }
         
+        /*
         // can use item ID to retreive saved item
         var query = PFQuery(className: "Products")
         
@@ -67,7 +97,7 @@ class ViewController: UIViewController {
             
         })
 
-        
+        */
     }
 
     override func didReceiveMemoryWarning() {
