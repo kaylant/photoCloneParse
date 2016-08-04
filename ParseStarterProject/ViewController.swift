@@ -12,6 +12,42 @@ import Parse
 
 class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
+    // set up spinner size and center
+    @IBAction func pause(sender: AnyObject) {
+        
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+    }
+    
+    @IBAction func restore(sender: AnyObject) {
+        
+        activityIndicator.stopAnimating()
+        // UIApplication.sharedApplication().endIgnoringInteractionEvents()
+        
+    }
+    
+    @available(iOS 8.0, *)
+    @IBAction func createAlert(sender: AnyObject) {
+        
+        var alert = UIAlertController(title: "Hey there!", message: "Are you sure?", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+        
+            self.dismissViewControllerAnimated(true, completion:nil)
+        
+        }))
+        
+        // present view controller to user
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+    }
+    
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]! ) {
         
         print("Image Selected")
@@ -22,7 +58,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     }
     
     @IBAction func importImage(sender: AnyObject) {
-        
         
         var image = UIImagePickerController()
         image.delegate = self
