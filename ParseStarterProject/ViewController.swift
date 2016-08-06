@@ -12,8 +12,47 @@ import Parse
 
 class ViewController: UIViewController {
 
+    @IBOutlet var userName: UITextField!
 
+    @IBOutlet var password: UITextField!
     
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
+    @available(iOS 8.0, *)
+    @IBAction func signUp(sender: AnyObject) {
+        
+        if userName.text == "" || password.text == "" {
+        
+            var alert = UIAlertController(title: "Error in form", message: "Please enter a username and password", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+            
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
+            }))
+            
+            self.presentViewController(alert, animated: true, completion: nil)
+        
+        } else {
+        
+            // spinner
+            activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))
+            activityIndicator.center = self.view.center
+            activityIndicator.hidesWhenStopped = true
+            activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+            view.addSubview(activityIndicator)
+            activityIndicator.startAnimating()
+            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+            
+            
+        
+        }
+        
+        
+        
+    }
+    
+    @IBAction func logIn(sender: AnyObject) {
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
