@@ -19,18 +19,28 @@ class ViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
     @available(iOS 8.0, *)
+    func displayAlert(title: String, message: String) {
+    
+        
+        var alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+                
+            self.dismissViewControllerAnimated(true, completion: nil)
+                
+        }))
+
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+    
+    }
+    
+    @available(iOS 8.0, *)
     @IBAction func signUp(sender: AnyObject) {
         
         if userName.text == "" || password.text == "" {
         
-            var alert = UIAlertController(title: "Error in form", message: "Please enter a username and password", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-            
-                self.dismissViewControllerAnimated(true, completion: nil)
-                
-            }))
-            
-            self.presentViewController(alert, animated: true, completion: nil)
+            displayAlert("Error in form", message: "Please enter a username and password")
         
         } else {
         
@@ -43,7 +53,38 @@ class ViewController: UIViewController {
             activityIndicator.startAnimating()
             UIApplication.sharedApplication().beginIgnoringInteractionEvents()
             
+            // sign user
+            var user = PFUser()
+            user.username = userName.text
+            user.password = password.text
             
+            // for generic error message
+            var errorMessage = "Please try again later"
+            
+            user.signUpInBackgroundWithBlock({ (success, error) in
+                
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+                
+                if error == nil {
+                
+                    // sign up successful
+                    
+                } else {
+                
+                    // if we have an error, unwrap and cast it as a string
+                    if let errorString = error!.userInfo["error"] as? String {
+                        
+                        // parse provided error message
+                        errorMessage = errorString
+                    
+                    }
+                    
+                    self.displayAlert("Failed sign up", message: errorMessage)
+                
+                }
+                
+            })
         
         }
         
