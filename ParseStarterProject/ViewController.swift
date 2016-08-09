@@ -11,10 +11,14 @@ import UIKit
 import Parse
 
 class ViewController: UIViewController {
+    
+    var signupActive = true
 
     @IBOutlet var userName: UITextField!
-
     @IBOutlet var password: UITextField!
+    @IBOutlet var signupButton: UIButton!
+    @IBOutlet var registeredText: UILabel!
+    @IBOutlet var loginButton: UIButton!
     
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
@@ -53,18 +57,20 @@ class ViewController: UIViewController {
             activityIndicator.startAnimating()
             UIApplication.sharedApplication().beginIgnoringInteractionEvents()
             
+            // for generic error message
+            var errorMessage = "Please try again later"
+            
+            if signupActive == true {
+            
             // sign user
             var user = PFUser()
             user.username = userName.text
             user.password = password.text
             
-            // for generic error message
-            var errorMessage = "Please try again later"
+
             
             user.signUpInBackgroundWithBlock({ (success, error) in
                 
-                self.activityIndicator.stopAnimating()
-                UIApplication.sharedApplication().endIgnoringInteractionEvents()
                 
                 if error == nil {
                 
@@ -85,6 +91,35 @@ class ViewController: UIViewController {
                 }
                 
             })
+                
+            } else {
+            
+                PFUser.logInWithUsernameInBackground(userName.text!, password: password.text!, block: {(user, error) -> Void in
+                    
+                    self.activityIndicator.stopAnimating()
+                    UIApplication.sharedApplication().endIgnoringInteractionEvents()
+
+                    
+                    if user != nil {
+                    
+                        // Logged in!
+                    
+                    } else {
+                    
+                        if let errorString = error!.userInfo["error"] as? String {
+                            
+                            // parse provided error message
+                            errorMessage = errorString
+                            
+                        }
+                        
+                        self.displayAlert("Failed sign up", message: errorMessage)
+                    
+                    }
+                
+                })
+            
+            }
         
         }
         
@@ -93,7 +128,31 @@ class ViewController: UIViewController {
     }
     
     @IBAction func logIn(sender: AnyObject) {
+        
+        if signupActive == true {
+        
+            signupButton.setTitle("Log In", forState: UIControlState.Normal)
+            
+            registeredText.text = "Not registered?"
+            
+            loginButton.setTitle("Sign Up", forState: UIControlState.Normal)
+            
+            signupActive = false
+        
+        } else {
+        
+            signupButton.setTitle("Sign Up", forState: UIControlState.Normal)
+            
+            registeredText.text = "Already registered?"
+            
+            loginButton.setTitle("Login", forState: UIControlState.Normal)
+            
+            signupActive = true
+            
+        }
+        
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
