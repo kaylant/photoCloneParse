@@ -62,35 +62,40 @@ class ViewController: UIViewController {
             
             if signupActive == true {
             
-            // sign user
-            var user = PFUser()
-            user.username = userName.text
-            user.password = password.text
-            
+                // sign user
+                var user = PFUser()
+                user.username = userName.text
+                user.password = password.text
+                
 
-            
-            user.signUpInBackgroundWithBlock({ (success, error) in
                 
-                
-                if error == nil {
-                
-                    // sign up successful
+                user.signUpInBackgroundWithBlock({ (success, error) in
                     
-                } else {
-                
-                    // if we have an error, unwrap and cast it as a string
-                    if let errorString = error!.userInfo["error"] as? String {
+                    self.activityIndicator.stopAnimating()
+                    UIApplication.sharedApplication().endIgnoringInteractionEvents()
+                    
+                    if error == nil {
+                    
+                        // sign up successful
                         
-                        // parse provided error message
-                        errorMessage = errorString
+                        // jump to next view controller once logged in
+                        self.performSegueWithIdentifier("login", sender: self)
+                        
+                    } else {
+                    
+                        // if we have an error, unwrap and cast it as a string
+                        if let errorString = error!.userInfo["error"] as? String {
+                            
+                            // parse provided error message
+                            errorMessage = errorString
+                        
+                        }
+                        
+                        self.displayAlert("Failed sign up", message: errorMessage)
                     
                     }
                     
-                    self.displayAlert("Failed sign up", message: errorMessage)
-                
-                }
-                
-            })
+                })
                 
             } else {
             
@@ -98,11 +103,13 @@ class ViewController: UIViewController {
                     
                     self.activityIndicator.stopAnimating()
                     UIApplication.sharedApplication().endIgnoringInteractionEvents()
-
                     
                     if user != nil {
                     
                         // Logged in!
+                        
+                        // jump to next view controller once logged in
+                        self.performSegueWithIdentifier("login", sender: self)
                     
                     } else {
                     
@@ -156,6 +163,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        if PFUser.currentUser() != nil {
+        
+            self.performSegueWithIdentifier("login", sender: self)
+        
+        }
     }
 
     override func didReceiveMemoryWarning() {

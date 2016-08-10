@@ -122,11 +122,57 @@
                         <outlet property="registeredText" destination="WPG-wg-6RN" id="GjA-tU-X4n"/>
                         <outlet property="signupButton" destination="g1t-SS-E3A" id="6t0-d6-FCk"/>
                         <outlet property="userName" destination="U7m-WR-WeM" id="elw-Bm-278"/>
+                        <segue destination="bXR-0S-Igw" kind="show" identifier="login" id="a4F-i6-mOy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="304.5" y="345.5"/>
+        </scene>
+        <!--User List-->
+        <scene sceneID="CXp-eQ-rrT">
+            <objects>
+                <tableViewController id="4aR-rH-Zfd" customClass="TableViewController" customModule="ParseStarterProject_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="0jb-Di-nHm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="uPS-RY-V8T">
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uPS-RY-V8T" id="gCT-jj-Jyu">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="4aR-rH-Zfd" id="L9D-Jd-9kh"/>
+                            <outlet property="delegate" destination="4aR-rH-Zfd" id="JBm-lN-A5u"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="User List" id="NAS-Ak-knj"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NCz-UW-IsU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1659" y="339"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="OLp-nN-Gxr">
+            <objects>
+                <navigationController id="bXR-0S-Igw" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ka6-Pz-PCj">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="4aR-rH-Zfd" kind="relationship" relationship="rootViewController" id="z1w-hL-00t"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dv0-RR-KPC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="839" y="339"/>
         </scene>
     </scenes>
 </document>
