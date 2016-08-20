@@ -15,10 +15,11 @@ class TableViewController: UITableViewController {
     var usernames = [""]
     var userids = [""]
     var isFollowing = ["":false]
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    
+    var refresher: UIRefreshControl!
+    
+    func refresh() {
+        
         var query = PFUser.query()
         
         query?.findObjectsInBackgroundWithBlock({ (objects, error) in
@@ -29,14 +30,14 @@ class TableViewController: UITableViewController {
                 self.usernames.removeAll(keepCapacity: true)
                 self.userids.removeAll(keepCapacity: true)
                 self.isFollowing.removeAll(keepCapacity: true)
-            
-                for object in users {
                 
+                for object in users {
+                    
                     if let user = object as? PFUser {
                         
                         // only add the user if it is not the current user
                         if user.objectId != PFUser.currentUser()?.objectId {
-                    
+                            
                             self.usernames.append(user.username!)
                             self.userids.append(user.objectId!)
                             
@@ -50,13 +51,13 @@ class TableViewController: UITableViewController {
                                 if let objects = objects {
                                     
                                     if objects.count > 0 {
-                                
+                                        
                                         self.isFollowing[user.objectId!] = true
-                                    
+                                        
                                     } else {
-                                    
+                                        
                                         self.isFollowing[user.objectId!] = false
-                                    
+                                        
                                     }
                                     
                                 }
@@ -65,23 +66,41 @@ class TableViewController: UITableViewController {
                                     
                                     self.tableView.reloadData()
                                     
+                                    self.refresher.endRefreshing()
+
+                                    
                                 }
                                 
                             })
                             
                         }
-                    
+                        
                     }
-                
+                    
                 }
-            
+                
             }
             
-//            print(self.usernames)
-//            print(self.userids)
-            
-            
+
         })
+        
+        
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // pull down to refresh
+        refresher = UIRefreshControl()
+        
+        refresher.attributedTitle = NSAttributedString(string: "Pull to refresh")
+
+        refresher.addTarget(self, action: #selector(TableViewController.refresh), forControlEvents: UIControlEvents.ValueChanged)
+        
+        self.tableView.addSubview(refresher)
+        
+        refresh()
+        
     }
 
     override func didReceiveMemoryWarning() {
