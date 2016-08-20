@@ -14,6 +14,7 @@ class TableViewController: UITableViewController {
     // download user list
     var usernames = [""]
     var userids = [""]
+    var isFollowing = ["":false]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,17 +25,49 @@ class TableViewController: UITableViewController {
             
             if let users = objects {
                 
+                // clears the array first from past sessions
                 self.usernames.removeAll(keepCapacity: true)
                 self.userids.removeAll(keepCapacity: true)
+                self.isFollowing.removeAll(keepCapacity: true)
             
                 for object in users {
                 
                     if let user = object as? PFUser {
                         
+                        // only add the user if it is not the current user
                         if user.objectId != PFUser.currentUser()?.objectId {
                     
                             self.usernames.append(user.username!)
                             self.userids.append(user.objectId!)
+                            
+                            // check if user is following someone already
+                            var query = PFQuery(className: "followers")
+                            query.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
+                            query.whereKey("following", equalTo: user.objectId!)
+                            
+                            query.findObjectsInBackgroundWithBlock({ (objects, error) in
+                                
+                                if let objects = objects {
+                                    
+                                    if objects.count > 0 {
+                                
+                                        self.isFollowing[user.objectId!] = true
+                                    
+                                    } else {
+                                    
+                                        self.isFollowing[user.objectId!] = false
+                                    
+                                    }
+                                    
+                                }
+                                
+                                if self.isFollowing.count == self.usernames.count {
+                                    
+                                    self.tableView.reloadData()
+                                    
+                                }
+                                
+                            })
                             
                         }
                     
@@ -44,10 +77,9 @@ class TableViewController: UITableViewController {
             
             }
             
-            print(self.usernames)
-            print(self.userids)
+//            print(self.usernames)
+//            print(self.userids)
             
-            self.tableView.reloadData()
             
         })
     }
@@ -73,12 +105,68 @@ class TableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
 
         cell.textLabel?.text = usernames[indexPath.row]
+        
+        // set up a variable to hold user id
+        // using that to check if user is following another user
+        let followedObjectId = userids[indexPath.row]
+        
+        if isFollowing[followedObjectId] == true {
+         
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+            
+        }
 
         return cell
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        <#code#>
+        
+        // follow another user
+        var cell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        
+        let followedObjectId = userids[indexPath.row]
+        
+        // check to see if already follwing a user
+        if isFollowing[followedObjectId] == false {
+            
+            isFollowing[followedObjectId] = true
+            
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+            
+            var following = PFObject(className: "followers")
+            following["following"] = userids[indexPath.row]
+            following["follower"] = PFUser.currentUser()?.objectId
+            
+            following.saveInBackground()
+            
+        } else {
+        
+            isFollowing[followedObjectId] = false
+            
+            cell.accessoryType = UITableViewCellAccessoryType.None
+            
+            // check if user is following someone already
+            // tap a user to unfollow
+            var query = PFQuery(className: "followers")
+            query.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
+            query.whereKey("following", equalTo: userids[indexPath.row])
+            
+            query.findObjectsInBackgroundWithBlock({ (objects, error) in
+                
+                if let objects = objects {
+                    
+                    for object in objects {
+                    
+                        object.deleteInBackground()
+                    
+                    }
+                    
+                }
+
+                
+            })
+
+        }
     }
 
 }
