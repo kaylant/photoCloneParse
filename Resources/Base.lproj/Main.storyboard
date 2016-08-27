@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hru-xt-TMY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="00u-H9-Z68">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -130,6 +130,70 @@
             </objects>
             <point key="canvasLocation" x="304.5" y="345.5"/>
         </scene>
+        <!--Your Feed-->
+        <scene sceneID="QIj-Y1-2fE">
+            <objects>
+                <tableViewController title="Your Feed" id="00u-H9-Z68" customClass="FeedTableViewController" customModule="ParseStarterProject_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="280" sectionHeaderHeight="28" sectionFooterHeight="28" id="gnh-RI-c1p">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="280" id="dtT-Br-0FH" customClass="cell" customModule="ParseStarterProject_Swift" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="375" height="280"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dtT-Br-0FH" id="734-1k-kD4">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="279.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Td-PM-E9O">
+                                            <rect key="frame" x="55" y="0.0" width="264" height="214"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f3I-EI-oiR">
+                                            <rect key="frame" x="55" y="250" width="264" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="khO-Ep-dt9">
+                                            <rect key="frame" x="8" y="222" width="359" height="23"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="f3I-EI-oiR" secondAttribute="trailing" constant="48" id="8Kz-2f-3nH"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="5Td-PM-E9O" secondAttribute="trailing" constant="48" id="DmL-Vw-69n"/>
+                                        <constraint firstItem="f3I-EI-oiR" firstAttribute="leading" secondItem="734-1k-kD4" secondAttribute="leadingMargin" constant="47" id="GIJ-Uc-JPT"/>
+                                        <constraint firstItem="f3I-EI-oiR" firstAttribute="top" secondItem="khO-Ep-dt9" secondAttribute="bottom" constant="5" id="O5F-iI-HPj"/>
+                                        <constraint firstItem="khO-Ep-dt9" firstAttribute="trailing" secondItem="734-1k-kD4" secondAttribute="trailingMargin" id="OjE-LJ-pqh"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="f3I-EI-oiR" secondAttribute="bottom" constant="0.5" id="S70-CQ-KZj"/>
+                                        <constraint firstItem="f3I-EI-oiR" firstAttribute="top" secondItem="khO-Ep-dt9" secondAttribute="bottom" constant="5" id="cqU-g7-JXH"/>
+                                        <constraint firstItem="khO-Ep-dt9" firstAttribute="top" secondItem="5Td-PM-E9O" secondAttribute="bottom" constant="8" id="lAi-hX-Pfg"/>
+                                        <constraint firstItem="5Td-PM-E9O" firstAttribute="top" secondItem="734-1k-kD4" secondAttribute="topMargin" constant="-8" id="pq5-aO-PDY"/>
+                                        <constraint firstItem="khO-Ep-dt9" firstAttribute="leading" secondItem="734-1k-kD4" secondAttribute="leadingMargin" id="rd1-0w-R1e"/>
+                                        <constraint firstItem="5Td-PM-E9O" firstAttribute="leading" secondItem="734-1k-kD4" secondAttribute="leadingMargin" constant="47" id="x7d-8f-0Dz"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="message" destination="f3I-EI-oiR" id="gc4-0b-H7x"/>
+                                    <outlet property="postedImage" destination="5Td-PM-E9O" id="2pL-Qf-z17"/>
+                                    <outlet property="userName" destination="khO-Ep-dt9" id="ATz-X8-qWz"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="00u-H9-Z68" id="EyU-09-zYm"/>
+                            <outlet property="delegate" destination="00u-H9-Z68" id="tch-dt-wlf"/>
+                        </connections>
+                    </tableView>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PQk-hA-jNp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1259.5" y="-374.5"/>
+        </scene>
         <!--User List-->
         <scene sceneID="CXp-eQ-rrT">
             <objects>
@@ -154,6 +218,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="User List" id="NAS-Ak-knj">
+                        <barButtonItem key="leftBarButtonItem" title="Feed" id="F3c-BL-wIO">
+                            <connections>
+                                <segue destination="00u-H9-Z68" kind="show" id="WLb-4K-Utj"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Post" id="ha2-Y0-Aou">
                             <connections>
                                 <segue destination="hru-xt-TMY" kind="show" id="8YM-Cf-O26"/>
