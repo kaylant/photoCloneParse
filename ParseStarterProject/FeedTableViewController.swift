@@ -7,17 +7,91 @@
 //
 
 import UIKit
+import Parse
 
 class FeedTableViewController: UITableViewController {
+    
+    var messages = [String]()
+    var userNames = [String]()
+    var imageFiles = [PFFile]()
+    var users = [String: String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+            
+        var query = PFUser.query()
+        
+        // get all the users
+        query?.findObjectsInBackgroundWithBlock({ (objects, error) in
+            
+            if let users = objects {
+                
+                // clears the array first from past sessions
+                self.messages.removeAll(keepCapacity: true)
+                self.users.removeAll(keepCapacity: true)
+                self.imageFiles.removeAll(keepCapacity: true)
+                self.userNames.removeAll(keepCapacity: true)
+                
+                for object in users {
+                    
+                    if let user = object as? PFUser {
+                    
+                        self.users[user.objectId!] = user.username!
+                    
+                    }
+                    
+                }
+            }
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        // which users are is the active user following
+        var getFollowedUsersQuery = PFQuery(className: "followers")
+        getFollowedUsersQuery.whereKey("follower", equalTo: PFUser.currentUser()!.objectId!)
+        
+        getFollowedUsersQuery.findObjectsInBackgroundWithBlock { (objects, error) in
+            
+            if let objects = objects {
+            
+                for object in objects {
+                
+                    var followedUser = object["following"] as! String
+                    
+                    var query = PFQuery(className: "Post")
+                    
+                    query.whereKey("userId", equalTo: followedUser)
+                    
+                    query.findObjectsInBackgroundWithBlock({ (objects, error) in
+                        
+                        if let objects = objects {
+                        
+                            for object in objects {
+                            
+                                self.messages.append(object["message"] as! String)
+                                
+                                self.imageFiles.append(object["imageFile"] as! PFFile)
+                                
+                                self.userNames.append(self.users[object["userId"] as! String]!)
+                                
+                                self.tableView.reloadData()
+                                
+                            }
+                            
+                            // print(self.users)
+                            // print(self.messages)
+                            
+                        
+                        }
+                        
+                        
+                    })
+                
+                }
+            
+            }
+            
+        }
+            
+        })
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,18 +108,28 @@ class FeedTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        return userNames.count
     }
 
    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let myCell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! cell
+        
+        imageFiles[indexPath.row].getDataInBackgroundWithBlock { (data, error) in
+            
+            if let downloadedImage = UIImage(data: data!) {
+            
+                myCell.postedImage.image = downloadedImage
+            
+            }
+            
+        }
 
         myCell.postedImage.image = UIImage(named: "default-placeholder.png")
         
-        myCell.userName.text = "User123"
+        myCell.userName.text = userNames[indexPath.row]
         
-        myCell.message.text = "Message"
+        myCell.message.text = messages[indexPath.row]
         
         return myCell
     }
